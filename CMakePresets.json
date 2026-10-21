@@ -1,0 +1,75 @@
+{
+  "version": 6,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 21,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "windows-base",
+      "hidden": true,
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/out/build/${presetName}",
+      "installDir": "${sourceDir}/out/install/${presetName}",
+      "architecture": {
+        "value": "x64",
+        "strategy": "external"
+      }
+    },
+    {
+      "name": "windows-debug",
+      "inherits": "windows-base",
+      "displayName": "Windows Debug x64",
+      "description": "Debug x64 Windows Build",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
+      "name": "windows-release",
+      "inherits": "windows-base",
+      "displayName": "Windows Release x64",
+      "description": "Release x64 Windows Build",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "Windows x64 Debug",
+      "configurePreset": "windows-debug"
+    },
+    {
+      "name": "Windows x64 Release",
+      "configurePreset": "windows-release"
+    }
+  ],
+  "packagePresets": [
+    {
+      "name": "windows-release",
+      "configurePreset": "windows-release",
+      "generators": [ "7Z" ]
+    }
+  ],
+  "workflowPresets": [
+    {
+      "name": "windows-release",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "windows-release"
+        },
+        {
+          "type": "build",
+          "name": "Windows x64 Release"
+        },
+        {
+          "type": "package",
+          "name": "windows-release"
+        }
+      ]
+    }
+  ]
+}
